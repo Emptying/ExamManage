@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.empty.exammanage.models.ChoiceTopic;
 
-import java.util.HashMap;
 
 /**
  * Created by emptying on 2016/6/11.
@@ -28,7 +27,7 @@ public class ChoiceTopicHelper {
         db.close();
     }
 
-    public static ChoiceTopic[] FindallTopic() {
+    public static ChoiceTopic[] findAllTopic() {
         ChoiceTopic[] choiceTopics = null;
         int i = 0;
         SQLiteDatabase db = DataBaseHelper.getInstance().getWritableDatabase();
@@ -50,6 +49,9 @@ public class ChoiceTopicHelper {
             }
         }
         db.close();
+        if (choiceTopics == null){
+            choiceTopics = new ChoiceTopic[0];
+        }
         return choiceTopics;
     }
 }

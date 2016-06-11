@@ -1,14 +1,8 @@
 package com.empty.exammanage;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,9 +63,7 @@ public class TopicManageActivity extends AppCompatActivity {
         Button btnAddChoice = (Button) findViewById(R.id.btnAddChoice);
         ListView lvChoice = (ListView) findViewById(R.id.lvChoice);
         Spinner spinner;
-        String Answer;
-        String[] strOption = {"A:", "B:", "C:", "D:"};
-        String Topic;
+        ChoiceTopic choiceTopic = new ChoiceTopic(0,"", null, "");
         SimpleAdapter adapter2;
         ArrayList<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map;
@@ -105,13 +97,9 @@ public class TopicManageActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         getContent();
                         String addStatus;
-                        if (Topic != null) {
+                        if (!choiceTopic.getTopicName().isEmpty()) {
                             //插入到选择题的表中
-                            ChoiceTopicHelper.insertTopic(new ChoiceTopic(
-                                    0,
-                                    Topic,
-                                    strOption,
-                                    Answer));
+                            ChoiceTopicHelper.insertTopic(choiceTopic);
 
                             addStatus = "添加成功";
                             RefreshListView();
@@ -139,25 +127,27 @@ public class TopicManageActivity extends AppCompatActivity {
 
         //获取编辑框的内容
         private void getContent() {
+            String[] strOption = {"A:", "B:", "C:", "D:"};
             //得到题目和四个备选答案
             if (editTopic != null) {
-                Topic = editTopic.getText().toString();
+                choiceTopic.setTopicName(editTopic.getText().toString());
             }
             for (int i = 0; i < editOption.length; i++) {
                 if (editOption[i] != null) {
                     strOption[i] += editOption[i].getText().toString();
                 }
             }
+            choiceTopic.setOption(strOption);
             //得到标准答案 get answer
 
             if (spinner != null) {
-                Answer = strOption[spinner.getSelectedItemPosition()];
+                choiceTopic.setAnswer(strOption[spinner.getSelectedItemPosition()]);
             }
         }
 
         //题目获取
         private void select() {
-            ChoiceTopic[] choiceTopics = ChoiceTopicHelper.FindallTopic();
+            ChoiceTopic[] choiceTopics = ChoiceTopicHelper.findAllTopic();
             if (choiceTopics != null){
                 for (ChoiceTopic choiceTopic:choiceTopics) {
                     map = new HashMap<>();
