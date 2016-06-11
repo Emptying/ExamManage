@@ -37,7 +37,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText" />
+                android:id="@+id/editTopic" />
         </LinearLayout>
 
         <LinearLayout
@@ -53,7 +53,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText2" />
+                android:id="@+id/editA" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,7 +70,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText3" />
+                android:id="@+id/editB" />
         </LinearLayout>
 
         <LinearLayout
@@ -86,7 +86,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText4" />
+                android:id="@+id/editC" />
         </LinearLayout>
     </LinearLayout>
 
@@ -103,7 +103,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText5" />
+            android:id="@+id/editD" />
     </LinearLayout>
 
     <LinearLayout
@@ -134,13 +134,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="添加"
-            android:id="@+id/button2" />
+            android:id="@+id/btnAddChoice" />
 
     </LinearLayout>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView" />
+        android:id="@+id/lvChoice" />
 
 </LinearLayout>

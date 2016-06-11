@@ -82,14 +82,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="上一题"
-            android:id="@+id/button"
+            android:id="@+id/btnPrevChoice"
             android:layout_weight="1" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="下一题"
-            android:id="@+id/button3"
+            android:id="@+id/btnNextChoice"
             android:layout_weight="1" />
     </LinearLayout>
 
