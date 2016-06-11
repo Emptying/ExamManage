@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Questions_item" >
+        <item>选择题</item>
+        <item>判断题</item>
+        <item>多选题</item>
+    </string-array>
+    <string-array name="select">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+    </string-array>
+</resources>
