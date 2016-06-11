@@ -17,25 +17,24 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.empty.exammanage.models.ChoiceTopic;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TopicManageActivity extends AppCompatActivity {
-    DataBaseHelper dbHelper;
-    SQLiteDatabase db;
     //choice
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbHelper=new DataBaseHelper(this,"TopicManage",null,1);
-        db=dbHelper.getWritableDatabase();
-        int which=getIntent().getIntExtra("topic",0);
-        int result=0;
+
+        int which = getIntent().getIntExtra("topic", 0);
+        int result = 0;
         //选择管理界面
-        switch (which){
+        switch (which) {
             case 0:
                 result = R.layout.activity_choice_manage;
                 break;
@@ -49,7 +48,7 @@ public class TopicManageActivity extends AppCompatActivity {
         //设置管理界面
         setContentView(result);
         //根据相应管理界面处理相应数据
-        switch (result){
+        switch (result) {
             case R.layout.activity_choice_manage:
                 new ChoiceManage();
                 break;
@@ -63,52 +62,61 @@ public class TopicManageActivity extends AppCompatActivity {
 
     }
 
-    private class ChoiceManage{
-        EditText  editTopic,editA,editB,editC,editD;
-        Button btnAddChoice=(Button)findViewById(R.id.btnAddChoice);
-        ListView lvChoice=(ListView)findViewById(R.id.lvChoice);
+    private class ChoiceManage {
+        EditText editTopic;
+        EditText[] editOption = new EditText[4];
+
+        Button btnAddChoice = (Button) findViewById(R.id.btnAddChoice);
+        ListView lvChoice = (ListView) findViewById(R.id.lvChoice);
         Spinner spinner;
         String Answer;
-        String A,B,C,D;
+        String[] strOption = {"A:", "B:", "C:", "D:"};
         String Topic;
         SimpleAdapter adapter2;
-        ArrayList<Map<String,Object>> list=new ArrayList<>();
-        Map<String,Object> map;
-        public ChoiceManage(){
+        ArrayList<Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> map;
+
+        public ChoiceManage() {
             init();
             //select();
         }
 
-        private void init(){
+        private void init() {
             select();
-            editTopic = (EditText)findViewById(R.id.editTopic);
-            editA = (EditText)findViewById(R.id.editA);
-            editB = (EditText)findViewById(R.id.editB);
-            editC = (EditText)findViewById(R.id.editC);
-            editD = (EditText)findViewById(R.id.editD);
+            editTopic = (EditText) findViewById(R.id.editTopic);
+            editOption[0] = (EditText) findViewById(R.id.editA);
+            editOption[1] = (EditText) findViewById(R.id.editB);
+            editOption[2] = (EditText) findViewById(R.id.editC);
+            editOption[3] = (EditText) findViewById(R.id.editD);
+
             //标准答案选择
-            spinner= (Spinner) findViewById(R.id.spinner);
-            String [] src=getResources().getStringArray(R.array.select);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(TopicManageActivity.this,android.R.layout.simple_spinner_item,android.R.id.text1,src);
-            if(spinner!=null){
+            spinner = (Spinner) findViewById(R.id.spinner);
+            String[] src = getResources().getStringArray(R.array.select);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(TopicManageActivity.this, android.R.layout.simple_spinner_item, android.R.id.text1, src);
+            if (spinner != null) {
                 spinner.setAdapter(adapter);
             }
 
 
             //添加题目
-            if(btnAddChoice!=null){
+            if (btnAddChoice != null) {
                 btnAddChoice.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         getContent();
                         String addStatus;
-                        if(Topic!=null){
+                        if (Topic != null) {
                             //插入到选择题的表中
-                            add();
-                            addStatus="添加成功";
+                            ChoiceTopicHelper.insertTopic(new ChoiceTopic(
+                                    0,
+                                    Topic,
+                                    strOption,
+                                    Answer));
+
+                            addStatus = "添加成功";
                             RefreshListView();
-                        }else {
-                            addStatus="题目不能为空";
+                        } else {
+                            addStatus = "题目不能为空";
                         }
                         Toast.makeText(TopicManageActivity.this, addStatus, Toast.LENGTH_SHORT).show();
                     }
@@ -117,103 +125,65 @@ public class TopicManageActivity extends AppCompatActivity {
             }
 
 
-
             //预览列表
-            adapter2=new SimpleAdapter(
+            adapter2 = new SimpleAdapter(
                     TopicManageActivity.this,
                     list,
                     R.layout.choice_item,
-                    new String[]{"ID","Topic"},
+                    new String[]{"ID", "Topic"},
                     new int[]{R.id.tvItemID, R.id.tvItemTopic}
             );
             lvChoice.setAdapter(adapter2);
 
         }
+
         //获取编辑框的内容
-        private void getContent(){
+        private void getContent() {
             //得到题目和四个备选答案
-            if(editTopic!=null){
-                Topic=editTopic.getText().toString();
+            if (editTopic != null) {
+                Topic = editTopic.getText().toString();
             }
-            if(editA!=null){
-                A="A:"+editA.getText().toString();
-            }
-            if(editB!=null){
-                B="B:"+editB.getText().toString();
-            }
-            if(editC!=null){
-                C="C:"+editC.getText().toString();
-            }
-            if(editD!=null){
-                D="D:"+editD.getText().toString();
-            }
-
-            //得到标准答案
-
-            if(spinner!=null) {
-                switch (spinner.getSelectedItemPosition()){
-                    case 0:
-                        Answer = A;
-                        break;
-                    default:
-                        break;
+            for (int i = 0; i < editOption.length; i++) {
+                if (editOption[i] != null) {
+                    strOption[i] += editOption[i].getText().toString();
                 }
-
             }
+            //得到标准答案 get answer
 
-        }
-
-        //添加题目
-        private void add(){
-
-            ContentValues values=new ContentValues();
-            values.put("Topic",Topic);
-            values.put("A",A);
-            values.put("B",B);
-            values.put("C",C);
-            values.put("D",D);
-            values.put("Answer",Answer);
-            db.insert(DataBaseHelper.TBNAME_CHOICE,null,values);
-
+            if (spinner != null) {
+                Answer = strOption[spinner.getSelectedItemPosition()];
+            }
         }
 
         //题目获取
-        private void select(){
-            Cursor cursor=db.query(DataBaseHelper.TBNAME_CHOICE,null,null,null,null,null,null);
-            while (cursor.moveToNext()){
-                map=new HashMap<>();
-                map.put("ID",cursor.getInt(cursor.getColumnIndex("ID")));
-                map.put("Topic",cursor.getString(cursor.getColumnIndex("Topic")));
-/*            map.put("A",cursor.getString(cursor.getColumnIndex("A")));
-            map.put("B",cursor.getString(cursor.getColumnIndex("B")));
-            map.put("C",cursor.getString(cursor.getColumnIndex("C")));
-            map.put("D",cursor.getString(cursor.getColumnIndex("D")));*/
-                list.add(map);
-
+        private void select() {
+            ChoiceTopic[] choiceTopics = ChoiceTopicHelper.FindallTopic();
+            if (choiceTopics != null){
+                for (ChoiceTopic choiceTopic:choiceTopics) {
+                    map = new HashMap<>();
+                    map.put("ID", choiceTopic.getId());
+                    map.put("Topic", choiceTopic.getTopicName());
+                    list.add(map);
+                }
             }
-
-
         }
+
         //刷新列表
-        private void RefreshListView(){
-            if(!list.isEmpty()){
+        private void RefreshListView() {
+            if (!list.isEmpty()) {
                 list.clear();
             }
             select();
             adapter2.notifyDataSetChanged();
         }
-
-
-
     }
 
 
-
-    private void trueOrFalseManage(){
+    private void trueOrFalseManage() {
 
     }
 
-    private void multipleManage(){
+    private void multipleManage() {
 
     }
 }

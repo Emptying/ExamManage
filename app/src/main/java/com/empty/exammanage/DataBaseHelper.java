@@ -5,10 +5,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by cws10 on 2016/6/11.
+ * Created by emptying on 2016/6/11.
  */
 public class DataBaseHelper extends SQLiteOpenHelper {
+    private static DataBaseHelper instance = new DataBaseHelper(MyApplication.getInstance().getApplicationContext());
     public static final String TBNAME_CHOICE="choiceTable";
+    private static final String DB_NAME = "test.db";
+
+    public DataBaseHelper(Context context) {
+        super(context, DB_NAME, null, 1);
+    }
     public DataBaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
@@ -31,5 +37,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+    public static DataBaseHelper getInstance(){
+        return instance;
     }
 }
