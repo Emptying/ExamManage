@@ -51,7 +51,19 @@ public class MainActivity extends AppCompatActivity {
                 topicDialog(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startTopicManage(which);
+                       // startTopicManage(which);
+                        switch (which){
+                            case 0:
+                                //选择题管理
+                                startChoiceManage();
+                                break;
+                            case 1:
+                                //判断题管理
+                                break;
+                            case 2:
+                                //多选题管理
+                                break;
+                        }
                     }
                 });
 
@@ -64,9 +76,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void startTopicManage(int topicWhich){
-        intent = new Intent(MainActivity.this,TopicManageActivity.class);
-        intent.putExtra("topic",topicWhich);
+    private void startChoiceManage(){
+        intent = new Intent(MainActivity.this,ChoiceManageActivity.class);
         startActivity(intent);
     }
 
