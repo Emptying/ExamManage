@@ -116,14 +116,11 @@ public class ChoiceActivity extends AppCompatActivity {
     public void updateButtonState() {
         boolean prev = true;
         boolean next = true;
-        if (choiceTopics == null){
+        if (choiceTopics == null || choiceTopics.length == 0){
             prev = next = false;
         }
         if (currentTopic == 0) {
             prev = false;
-        }
-        if (currentTopic == choiceTopics.length - 1){
-            next = false;
         }
         buttonPrev.setEnabled(prev);
         buttonNext.setEnabled(next);
@@ -140,8 +137,8 @@ public class ChoiceActivity extends AppCompatActivity {
                     }
                 }
             }
+            tvAnswer.setText(choiceTopics[index].getAnswer());
         }
-        tvAnswer.setText(choiceTopics[index].getAnswer());
     }
     public boolean answerCompare(){
 /*        String i= radioOption[getSelectedIndex()].getText().toString();

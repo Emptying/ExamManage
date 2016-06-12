@@ -23,7 +23,7 @@ public class ChoiceManageActivity extends AppCompatActivity {
     Button btnAddChoice;
     ListView lvChoice;
     Spinner spinner;
-    ChoiceTopic choiceTopic = new ChoiceTopic(0,"", null, "");
+    ChoiceTopic choiceTopic = new ChoiceTopic(0, "", null, "");
     SimpleAdapter adapter2;
     ArrayList<Map<String, Object>> list = new ArrayList<>();
     Map<String, Object> map;
@@ -34,6 +34,7 @@ public class ChoiceManageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choice_manage);
         init();
     }
+
     private void init() {
         select();
         editTopic = (EditText) findViewById(R.id.editTopic);
@@ -111,8 +112,8 @@ public class ChoiceManageActivity extends AppCompatActivity {
     //题目获取
     private void select() {
         ChoiceTopic[] choiceTopics = ChoiceTopicHelper.findAllTopic();
-        if (choiceTopics != null){
-            for (ChoiceTopic choiceTopic:choiceTopics) {
+        if (choiceTopics != null) {
+            for (ChoiceTopic choiceTopic : choiceTopics) {
                 map = new HashMap<>();
                 map.put("ID", choiceTopic.getId());
                 //
