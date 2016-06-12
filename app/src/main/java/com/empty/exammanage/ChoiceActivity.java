@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ public class ChoiceActivity extends AppCompatActivity {
     public TextView tvAnswer;
     public RadioButton[] radioOption = new RadioButton[4];
     public RadioGroup radioGroup;
+    public LinearLayout answerLayout;
     public int currentTopic = 0;
 
     @Override
@@ -25,8 +27,7 @@ public class ChoiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choice);
         choiceTopics = ChoiceTopicHelper.findAllTopic();
-
-
+        answerLayout = (LinearLayout)findViewById(R.id.AnswerLayout);
         buttonPrev = (Button) findViewById(R.id.btnPrevChoice);
         buttonNext = (Button) findViewById(R.id.btnNextChoice);
         radioGroup = (RadioGroup) findViewById(R.id.rgChoice);
@@ -54,7 +55,14 @@ public class ChoiceActivity extends AppCompatActivity {
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextTopic();
+
+                if(answerCompare()||(answerLayout.getVisibility())==0){
+                    nextTopic();
+                    radioGroup.clearCheck();
+                }else {
+                    answerLayout.setVisibility(View.VISIBLE);
+                }
+
             }
         });
 
@@ -82,11 +90,10 @@ public class ChoiceActivity extends AppCompatActivity {
         //radioGroup.clearCheck();
     }
     public int getSelectedIndex(){
-        int checkedId = 0;
         int selected = 0;
         if (radioGroup != null) {
-            radioGroup.getCheckedRadioButtonId();
-            switch (checkedId) {
+
+            switch (radioGroup.getCheckedRadioButtonId()) {
                 case R.id.radioA:
                     selected = 0;
                     break;
@@ -122,6 +129,7 @@ public class ChoiceActivity extends AppCompatActivity {
         buttonNext.setEnabled(next);
     }
     public void showChoiceTopic(int index) {
+        answerLayout.setVisibility(View.INVISIBLE);
         if (choiceTopics != null && index >= 0 && index < choiceTopics.length) {
             String[] option = choiceTopics[index].getOption();
             tvChoiceTopic.setText( choiceTopics[index].getTopicName());
@@ -133,7 +141,13 @@ public class ChoiceActivity extends AppCompatActivity {
                 }
             }
         }
-        tvAnswer.setText("");
-
+        tvAnswer.setText(choiceTopics[index].getAnswer());
     }
+    public boolean answerCompare(){
+/*        String i= radioOption[getSelectedIndex()].getText().toString();
+        String j=tvAnswer.getText().toString();*/
+
+        return radioOption[getSelectedIndex()].getText().toString().equals(tvAnswer.getText().toString());
+    }
+
 }

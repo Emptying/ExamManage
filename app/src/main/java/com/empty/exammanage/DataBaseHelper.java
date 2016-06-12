@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DataBaseHelper extends SQLiteOpenHelper {
     private static DataBaseHelper instance = new DataBaseHelper(MyApplication.getInstance().getApplicationContext());
     public static final String TBNAME_CHOICE="choiceTable";
-    private static final String DB_NAME = "test.db";
+    private static final String DB_NAME = "TopicManager.db";
 
     public DataBaseHelper(Context context) {
         super(context, DB_NAME, null, 1);

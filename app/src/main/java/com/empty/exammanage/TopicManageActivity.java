@@ -152,6 +152,7 @@ public class TopicManageActivity extends AppCompatActivity {
                 for (ChoiceTopic choiceTopic:choiceTopics) {
                     map = new HashMap<>();
                     map.put("ID", choiceTopic.getId());
+                    //
                     map.put("Topic", choiceTopic.getTopicName());
                     list.add(map);
                 }
